@@ -7,16 +7,16 @@
 
 export const project = {
   meta: {
-    title: "Pneumokokken-Impfung bei Kindern",
-    eyebrow: "Pädiatrie",
+    title: "Indikation",
+    eyebrow: "Medizinisches Fachgebiet",
     description: "med.i.scroll – interaktives Gelbe-Liste-Scrollytelling",
     logo: "/assets/images/glo-logo.png",
     logoUrl: "https://www.gelbe-liste.de/",
-    moduleId: "pneumokokken-kinder-template",
-    analyticsPage: "med-i-scroll-pneumokokken-kinder",
-    analyticsChapter1: "paediatrie",
-    pdfFileName: "Pneumokokken-Impfung-bei-Kindern_Gelbe-Liste.pdf",
-    pdfSubject: "Pädiatrie | Gelbe Liste",
+    moduleId: "indikation-template",
+    analyticsPage: "med-i-scroll-indikation",
+    analyticsChapter1: "medizinisches-fachgebiet",
+    pdfFileName: "Indikation_Gelbe-Liste.pdf",
+    pdfSubject: "Medizinisches Fachgebiet | Gelbe Liste",
     pdfAuthor: "Vidal MMI Germany GmbH"
   },
 
@@ -51,9 +51,9 @@ export const project = {
     {
       id: "intro",
       number: "01",
-      nav: "Pneumokokken-Impfung",
-      kicker: "Pädiatrie",
-      title: "Pneumokokken-Impfung bei Kindern",
+      nav: "Indikation",
+      kicker: "Medizinisches Fachgebiet",
+      title: "Indikation",
       subtitle: "Beispielinhalt für ein neues med.i.scroll-Projekt – Texte und Medien zentral in project.js austauschen.",
       background: "/assets/images/placeholder-hero.svg",
       focal: "center center",
@@ -86,11 +86,11 @@ export const project = {
       bullets: ["Aspekt A", "Aspekt B", "Aspekt C"]
     },
     {
-      id: "standardimpfung",
+      id: "diagnose-versorgung",
       number: "03",
-      nav: "Standardimpfung",
+      nav: "Diagnose und Versorgung",
       kicker: "Versorgung",
-      title: "Standardimpfung und Versorgungssituation",
+      title: "Diagnose und Versorgung",
       background: "/assets/images/placeholder-medical.svg",
       tone: "dark",
       align: "right",
