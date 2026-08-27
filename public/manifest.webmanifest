@@ -1,0 +1,8 @@
+{
+  "name": "Gelbe Liste med.i.scroll Template",
+  "short_name": "med.i.scroll",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffdc00"
+}
