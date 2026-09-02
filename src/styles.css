@@ -1468,3 +1468,78 @@ button.secondary-cta {
   cursor: progress;
   opacity: .7;
 }
+
+/* =========================================================
+   Inline graphics – direct open control + click-to-open
+   Background images remain non-interactive; their existing
+   end-of-text "Grafik öffnen" control is unchanged.
+   ========================================================= */
+.inline-graphic-block {
+  width: 100%;
+  margin: 16px 0 18px;
+}
+
+.inline-graphic-trigger {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-small, 10px);
+  background: transparent;
+  color: inherit;
+  cursor: zoom-in;
+  overflow: hidden;
+  text-align: inherit;
+}
+
+.inline-graphic-trigger .inline-figure {
+  display: block;
+  width: 100%;
+  margin: 0 !important;
+  cursor: zoom-in;
+  transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+}
+
+.inline-graphic-trigger:hover .inline-figure {
+  transform: scale(1.006);
+  box-shadow: 0 12px 34px rgba(0,0,0,.16);
+}
+
+.inline-graphic-trigger:focus-visible {
+  outline: 3px solid var(--yellow, #ffdc00);
+  outline-offset: 3px;
+}
+
+.graphic-open-row--inline {
+  margin-top: 12px !important;
+  padding-top: 0 !important;
+  border-top: 0 !important;
+}
+
+@media (max-width: 640px) {
+  .inline-graphic-block {
+    margin-top: 18px;
+  }
+
+  .graphic-open-row--inline {
+    margin-top: 10px !important;
+    padding-top: 0 !important;
+  }
+}
+
+@media print {
+  .inline-graphic-trigger {
+    display: block !important;
+    cursor: default !important;
+  }
+
+  .inline-graphic-trigger .inline-figure {
+    margin: 6mm auto 0 !important;
+  }
+
+  .graphic-open-row--inline {
+    display: none !important;
+  }
+}
+

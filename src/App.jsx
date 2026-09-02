@@ -16,11 +16,11 @@ import { generateProjectPdf } from "./pdf/generatePdf";
 import { trackEvent, trackOnce } from "./tracking/piano";
 
 function PageContent({ page, onOpenGraphic, onPdf, pdfGenerating }) {
-  const graphicHandler = page.zoomable ? onOpenGraphic : undefined;
+  const graphicHandler = page.inlineImage || page.zoomable ? onOpenGraphic : undefined;
   switch (page.kind) {
     case "hero": return <HeroContent page={page} />;
     case "stats": return <StatsContent page={page} onOpenGraphic={graphicHandler} />;
-    case "steps": return <StepsContent page={page} />;
+    case "steps": return <StepsContent page={page} onOpenGraphic={graphicHandler} />;
     case "sources": return <SourcesContent page={page} project={project} onPdf={onPdf} pdfGenerating={pdfGenerating} />;
     case "video": return <VideoContent page={page} moduleId={project.meta.moduleId} />;
     case "imprint": return <ImprintContent page={page} imprint={project.imprint} />;
@@ -43,7 +43,7 @@ export default function App() {
 
   const handleOpenGraphic = useCallback((page) => {
     setOpenGraphic(page);
-    trackEvent("image_view_open", { chapter_id: page.id, image_src: page.background, module_id: project.meta.moduleId });
+    trackEvent("image_view_open", { chapter_id: page.id, image_src: page.inlineImage || page.background, module_id: project.meta.moduleId });
   }, []);
 
   const handleCloseGraphic = useCallback(() => {
@@ -117,7 +117,7 @@ export default function App() {
           </PageShell>
         ))}
       </main>
-      <ImageLightbox open={Boolean(openGraphic)} image={openGraphic?.background} title={openGraphic?.kicker || openGraphic?.nav || "Grafik"} chapterId={openGraphic?.id} moduleId={project.meta.moduleId} onClose={handleCloseGraphic} />
+      <ImageLightbox open={Boolean(openGraphic)} image={openGraphic?.inlineImage || openGraphic?.background} title={openGraphic?.kicker || openGraphic?.nav || "Grafik"} chapterId={openGraphic?.id} moduleId={project.meta.moduleId} onClose={handleCloseGraphic} />
     </>
   );
 }
