@@ -42,9 +42,13 @@ Die React-Komponenten, Navigation, Zoom-Viewer, mobile Darstellung und PDF-Engin
 
 Der Header-PDF-Button erzeugt eine echte clientseitige DIN-A4-Hochformat-PDF mit jsPDF. Dateiname und Metadaten werden in `project.meta` gepflegt.
 
-## Tracking
+## Piano Analytics Tracking
 
-Die zentrale Modul-ID wird in `project.meta.moduleId` definiert. Die vorhandenen Events für Kapitel, Scrolltiefe, Grafik-Viewer, Video und PDF greifen diese ID automatisch auf.
+Die stabile Projekt-ID wird in `project.meta.projectId` definiert. Die Tracking-Schicht liegt zentral in `src/tracking/piano.js` und verwendet bevorzugt die vorhandene Vidal-/Gelbe-Liste-Semantik. Scroll Tracking wurde auf die aktuelle Piano-Logik `page.scroll` + `scroll_rate` umgestellt; Kapitel- und Video-Events werden als klar definierte Custom Events geführt.
+
+Im Mastertemplate ist `VITE_PIANO_ENABLED=false`. Nach Validierung der neuen Properties/Events im Piano Data Model und interner Datenschutzfreigabe wird die Variable im produktiven Vercel-Projekt auf `true` gesetzt.
+
+Details: `PIANO-ANALYTICS.md`.
 
 ## Vercel
 

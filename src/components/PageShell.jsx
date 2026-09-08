@@ -1,7 +1,19 @@
 import { useEffect, useRef, useState } from "react";
 import { trackEvent, trackOnce } from "../tracking/piano";
 
-export default function PageShell({ page, index, total, nextId, previousId, startId, onActive, children, long = false, moduleId }) {
+export default function PageShell({
+  page,
+  index,
+  total,
+  nextId,
+  previousId,
+  startId,
+  onActive,
+  children,
+  long = false,
+  projectId,
+  pageName
+}) {
   const ref = useRef(null);
   const [visible, setVisible] = useState(index === 0);
 
@@ -14,10 +26,12 @@ export default function PageShell({ page, index, total, nextId, previousId, star
         setVisible(entry.isIntersecting && entry.intersectionRatio >= 0.12);
         if (entry.isIntersecting && entry.intersectionRatio >= 0.35) {
           onActive(index);
-          trackOnce(`chapter-${page.id}`, "chapter_view", {
+          trackOnce(`chapter-${page.id}`, "chapter.display", {
+            page: pageName,
             chapter_id: page.id,
             chapter_number: index + 1,
-            chapter_title: page.nav
+            chapter_title: page.nav,
+            content_type: page.kind
           });
         }
       },
@@ -26,10 +40,19 @@ export default function PageShell({ page, index, total, nextId, previousId, star
 
     observer.observe(element);
     return () => observer.disconnect();
-  }, [index, onActive, page]);
+  }, [index, onActive, page, pageName]);
 
-  const scrollTo = (targetId) => {
+  const scrollTo = (targetId, action) => {
     if (!targetId) return;
+    trackEvent("click.action", {
+      pop_in_type: "Navigation",
+      pop_in_name: "Chapter navigation",
+      click: action,
+      page: pageName,
+      chapter_id: page.id,
+      destination_path: `#${targetId}`,
+      trigger_source: "chapter_navigation"
+    });
     document.getElementById(targetId)?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
@@ -60,7 +83,7 @@ export default function PageShell({ page, index, total, nextId, previousId, star
       <div className="scroll-controls" aria-label="Kapitel-Navigation">
         <button
           className="scroll-button scroll-button--down"
-          onClick={() => scrollTo(nextId)}
+          onClick={() => scrollTo(nextId, "Next chapter")}
           aria-label={nextId ? "Zum nächsten Kapitel" : "Kein weiteres Kapitel"}
           disabled={!nextId}
         >
@@ -68,7 +91,7 @@ export default function PageShell({ page, index, total, nextId, previousId, star
         </button>
         <button
           className="scroll-button scroll-button--up"
-          onClick={() => scrollTo(previousId)}
+          onClick={() => scrollTo(previousId, "Previous chapter")}
           aria-label={previousId ? "Zum vorherigen Kapitel" : "Kein vorheriges Kapitel"}
           disabled={!previousId}
         >
@@ -76,14 +99,7 @@ export default function PageShell({ page, index, total, nextId, previousId, star
         </button>
         <button
           className="scroll-button scroll-button--top"
-          onClick={() => {
-            scrollTo(startId);
-            trackEvent("navigation_click", {
-              navigation_action: "scroll_to_top",
-              chapter_id: page.id,
-              module_id: moduleId
-            });
-          }}
+          onClick={() => scrollTo(startId, "Scroll to top")}
           aria-label="Zum Anfang der Anwendung"
           title="Zum Anfang"
         >

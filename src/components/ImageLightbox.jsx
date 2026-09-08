@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { trackEvent } from "../tracking/piano";
+import { trackOnce } from "../tracking/piano";
 
 const MIN_SCALE = 1;
 const MAX_SCALE = 4;
@@ -13,12 +13,27 @@ function distance(a, b) {
   return Math.hypot(a.x - b.x, a.y - b.y);
 }
 
-export default function ImageLightbox({ open, image, title, chapterId, moduleId, onClose }) {
+export default function ImageLightbox({ open, image, imageId, title, chapterId, pageName, onClose }) {
   const [scale, setScale] = useState(1);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const pointers = useRef(new Map());
   const lastPanPoint = useRef(null);
   const pinchStart = useRef(null);
+  const stableImageId = imageId || chapterId || "graphic";
+
+  const recordZoom = (next) => {
+    if (next <= 1) return;
+    trackOnce(`image-zoom-${stableImageId}`, "click.action", {
+      pop_in_type: "Graphic",
+      pop_in_name: title,
+      click: "Zoom graphic",
+      page: pageName,
+      chapter_id: chapterId,
+      image_id: stableImageId,
+      zoom_level: Number(next.toFixed(2)),
+      trigger_source: "graphic_viewer"
+    });
+  };
 
   const resetView = () => {
     setScale(1);
@@ -35,7 +50,11 @@ export default function ImageLightbox({ open, image, title, chapterId, moduleId,
     const onKeyDown = (event) => {
       if (event.key === "Escape") onClose();
       if (event.key === "+" || event.key === "=") {
-        setScale((current) => clamp(current + STEP, MIN_SCALE, MAX_SCALE));
+        setScale((current) => {
+          const next = clamp(current + STEP, MIN_SCALE, MAX_SCALE);
+          recordZoom(next);
+          return next;
+        });
       }
       if (event.key === "-") {
         setScale((current) => {
@@ -52,7 +71,7 @@ export default function ImageLightbox({ open, image, title, chapterId, moduleId,
       window.removeEventListener("keydown", onKeyDown);
       document.body.style.overflow = previousOverflow;
     };
-  }, [open, onClose]);
+  }, [open, onClose, stableImageId, chapterId, title, pageName]);
 
   if (!open) return null;
 
@@ -60,11 +79,7 @@ export default function ImageLightbox({ open, image, title, chapterId, moduleId,
     setScale((current) => {
       const next = clamp(current + delta, MIN_SCALE, MAX_SCALE);
       if (next === 1) setPosition({ x: 0, y: 0 });
-      trackEvent("image_zoom", {
-        chapter_id: chapterId,
-        zoom_level: next,
-        module_id: moduleId
-      });
+      recordZoom(next);
       return next;
     });
   };
@@ -92,7 +107,9 @@ export default function ImageLightbox({ open, image, title, chapterId, moduleId,
       const [a, b] = [...pointers.current.values()];
       if (!pinchStart.current) return;
       const ratio = distance(a, b) / pinchStart.current.distance;
-      setScale(clamp(pinchStart.current.scale * ratio, MIN_SCALE, MAX_SCALE));
+      const next = clamp(pinchStart.current.scale * ratio, MIN_SCALE, MAX_SCALE);
+      recordZoom(next);
+      setScale(next);
       return;
     }
 

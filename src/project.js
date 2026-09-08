@@ -12,9 +12,24 @@ export const project = {
     description: "med.i.scroll – interaktives Gelbe-Liste-Scrollytelling",
     logo: "/assets/images/glo-logo.png",
     logoUrl: "https://www.gelbe-liste.de/",
-    moduleId: "indikation-template",
-    analyticsPage: "med-i-scroll-indikation",
-    analyticsChapter1: "medizinisches-fachgebiet",
+    projectId: "indikation-template",
+    analytics: {
+      page: "med.i.scroll | Indikation",
+      pageType: "Microsite",
+      visitorType: "Not logged",
+      medicalField: "Medizinisches Fachgebiet",
+      indication: "Indikation",
+      articleCategory: ["MED.I.SCROLL"],
+      tags: ["med.i.scroll", "Gelbe Liste", "Scrollytelling"],
+      product: {
+        name: "",
+        molecules: [],
+        titulaire: "",
+        atcClassCodes: [],
+        atcClassNames: [],
+        ucd10Codes: []
+      }
+    },
     pdfFileName: "Indikation_Gelbe-Liste.pdf",
     pdfSubject: "Medizinisches Fachgebiet | Gelbe Liste",
     pdfAuthor: "Vidal MMI Germany GmbH"
@@ -23,11 +38,13 @@ export const project = {
   sources: [
     {
       text: "Quelle 1 – hier vollständige Literaturangabe eintragen.",
-      url: "https://www.gelbe-liste.de/"
+      url: "https://www.gelbe-liste.de/",
+      analyticsId: "source-1"
     },
     {
       text: "Quelle 2 – weitere Referenz ergänzen.",
-      url: "https://www.gelbe-liste.de/"
+      url: "https://www.gelbe-liste.de/",
+      analyticsId: "source-2"
     }
   ],
 
@@ -74,6 +91,7 @@ export const project = {
       inlineImage: "/assets/images/placeholder-data.svg",
       inlineImageAlt: "Beispielgrafik",
       zoomable: true,
+      imageId: "ueberblick-grafik",
       wide: true,
       tone: "light",
       align: "left",
@@ -131,6 +149,7 @@ export const project = {
       title: "Relevante Grafik im Detail",
       background: "/assets/images/placeholder-graphic.svg",
       zoomable: true,
+      imageId: "fachgrafik",
       wide: true,
       tone: "dark",
       align: "right",
@@ -152,7 +171,8 @@ export const project = {
       long: true,
       primaryCta: {
         label: "Weitere Informationen auf Gelbe Liste",
-        url: "https://www.gelbe-liste.de/"
+        url: "https://www.gelbe-liste.de/",
+        analyticsId: "cta-gelbe-liste-weitere-informationen"
       },
       pdfCtaLabel: "Inhalte als PDF erstellen"
     },
