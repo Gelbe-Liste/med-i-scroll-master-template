@@ -1,7 +1,8 @@
 import ContentCard from "./ContentCard";
 import InlineGraphic from "./InlineGraphic";
+import WorkflowCarousel from "./WorkflowCarousel";
 
-export default function StepsContent({ page, onOpenGraphic }) {
+export default function StepsContent({ page, onOpenGraphic, pageName }) {
   const hasInlineGraphic = Boolean(page.inlineImage);
 
   return (
@@ -20,22 +21,7 @@ export default function StepsContent({ page, onOpenGraphic }) {
       )}
 
       {page.intro && <p className="page-subtitle">{page.intro}</p>}
-      <div className="steps">
-        {page.steps.map((step, index) => (
-          <section className="step" key={step.title}>
-            <div className="step__number">{index + 1}</div>
-            <div>
-              <h3>{step.title}</h3>
-              {step.items && (
-                <ul className="editorial-list">
-                  {step.items.map((item) => <li key={item}>{item}</li>)}
-                </ul>
-              )}
-              {step.quote && <blockquote className="editorial-quote">{step.quote}</blockquote>}
-            </div>
-          </section>
-        ))}
-      </div>
+      <WorkflowCarousel page={page} pageName={pageName} />
       {page.quote && <blockquote className="editorial-quote">{page.quote}</blockquote>}
 
       {onOpenGraphic && !hasInlineGraphic && (

@@ -1,11 +1,12 @@
 import ContentCard from "./ContentCard";
 import InlineGraphic from "./InlineGraphic";
+import AccordionGroup from "./AccordionGroup";
 
 function Quote({ children }) {
   return <blockquote className="editorial-quote">{children}</blockquote>;
 }
 
-export default function StandardContent({ page, onOpenGraphic }) {
+export default function StandardContent({ page, onOpenGraphic, pageName }) {
   const hasInlineGraphic = Boolean(page.inlineImage);
 
   return (
@@ -28,12 +29,18 @@ export default function StandardContent({ page, onOpenGraphic }) {
       {page.bullets && <ul className="editorial-list">{page.bullets.map((item, index) => <li key={index}>{item}</li>)}</ul>}
       {page.numbered && <ol className="editorial-list editorial-list--numbered">{page.numbered.map((item, index) => <li key={index}>{item}</li>)}</ol>}
       {page.paragraphsAfter?.map((paragraph, index) => <p key={`after-${index}`}>{paragraph}</p>)}
-      {page.blocks?.map((block, index) => (
-        <div className="text-block" key={index}>
-          <h3>{block.heading}</h3>
-          <p>{block.text}</p>
-        </div>
-      ))}
+
+      {page.accordionItems ? (
+        <AccordionGroup items={page.accordionItems} page={page} pageName={pageName} variant={page.accordionVariant || "faq"} />
+      ) : (
+        page.blocks?.map((block, index) => (
+          <div className="text-block" key={index}>
+            <h3>{block.heading}</h3>
+            <p>{block.text}</p>
+          </div>
+        ))
+      )}
+
       {page.quote && <Quote>{page.quote}</Quote>}
       {page.note && <div className="important-note">{page.note}</div>}
 

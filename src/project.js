@@ -49,7 +49,9 @@ export const project = {
   ],
 
   imprint: {
+    brandHeading: "Gelbe Liste",
     editorialHeading: "Corporate Publishing",
+    editorialRoleLabel: "Redaktion",
     editorialName: "Guido Strehlau",
     company: "Vidal MMI Germany GmbH",
     street: "Monzastraße 4",
@@ -160,8 +162,42 @@ export const project = {
       note: "Die Originalgrafik im Viewer bleibt unverändert und kann auf mobilen Geräten per Pinch-Zoom vergrößert werden."
     },
     {
-      id: "literatur",
+      id: "faq",
       number: "06",
+      nav: "Fragen & Antworten",
+      kicker: "Praxis-FAQ",
+      title: "Häufige Fragen – kompakt beantwortet",
+      subtitle: "Die Frage antippen, um die Antwort ein- oder auszublenden.",
+      background: "/assets/images/placeholder-practice.svg",
+      tone: "light",
+      align: "left",
+      kind: "standard",
+      long: true,
+      accordionVariant: "faq",
+      accordionItems: [
+        {
+          id: "faq-1",
+          question: "Wie kann eine typische Praxisfrage formuliert werden?",
+          answer: [
+            "Hier steht die kurze, fachlich freigegebene Antwort. Die Antwort kann aus einem oder mehreren Absätzen bestehen.",
+            "Weitere Erläuterungen lassen sich bei Bedarf als zusätzlicher Absatz ergänzen."
+          ]
+        },
+        {
+          id: "faq-2",
+          question: "Können mehrere Fragen unabhängig voneinander geöffnet werden?",
+          answer: "Ja. Jede Frage kann separat auf- und zugeklappt werden. Mehrere Antworten dürfen gleichzeitig geöffnet sein."
+        },
+        {
+          id: "faq-3",
+          question: "Wird die Interaktion in Piano Analytics erfasst?",
+          answer: "Ja. Öffnen und Schließen werden als accordion.toggle inklusive Frage, Kapitel, Status und Auslöser erfasst."
+        }
+      ]
+    },
+    {
+      id: "literatur",
+      number: "07",
       nav: "Literatur & Download",
       kicker: "Quellen",
       title: "Literatur & weiterführende Informationen",
@@ -178,7 +214,7 @@ export const project = {
     },
     {
       id: "impressum",
-      number: "07",
+      number: "08",
       nav: "Impressum",
       kicker: "Rechtliche Angaben",
       title: "Impressum",

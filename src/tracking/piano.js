@@ -47,17 +47,27 @@ const essentialProperties = [
   "entry_point",
   "video_id",
   "video_name",
-  "progress_percent"
+  "progress_percent",
+  "accordion_id",
+  "accordion_title",
+  "accordion_group",
+  "interaction_state",
+  "slide_index",
+  "slide_total",
+  "slide_title"
 ];
 
 const essentialEvents = [
+  "page.display",
   "pop_in.display",
   "click.action",
   "chapter.display",
   "page.scroll",
   "video.start",
   "video.progress",
-  "video.complete"
+  "video.complete",
+  "accordion.toggle",
+  "workflow.slide"
 ];
 
 function cleanProperties(properties = {}) {

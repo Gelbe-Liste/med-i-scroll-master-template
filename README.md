@@ -56,3 +56,51 @@ Details: `PIANO-ANALYTICS.md`.
 - Build Command: `npm run build`
 - Output: `dist`
 - Node.js: 22.x
+
+## Erweiterungen ab v6 (14.09.2026)
+
+Zusätzlich unterstützt das Template:
+
+- `steps`: mobile Workflow-/Swipe-Navigation; links = vorwärts, rechts = rückwärts.
+- `accordionItems`: aufklappbare FAQ-/Praxisfall-Inhalte in `standard`-Kapiteln.
+- `cta`: eigener Kapiteltyp mit `primaryCta`, optionalen `badges`, `bullets`, `inlineImage` und `note`.
+- erweiterte Impressum-/Sponsoring-Felder.
+- PDF-Ausgabe dieser neuen Inhaltstypen.
+- erweitertes Piano-Tracking für Accordion und Workflow.
+
+Beispiel Accordion in einem `standard`-Kapitel:
+```js
+accordionItems: [
+  { id: "faq-1", heading: "Frage", teaser: "Kurze Einordnung", answer: "Antwort" }
+]
+```
+
+Beispiel CTA-Kapitel:
+```js
+{
+  id: "vertiefung",
+  kind: "cta",
+  kicker: "Vertiefung",
+  title: "Mehr erfahren",
+  paragraphs: ["Einführender Text"],
+  badges: ["Merkmal 1", "Merkmal 2"],
+  primaryCta: { label: "Jetzt öffnen", url: "https://www.gelbe-liste.de/", analyticsId: "cta-vertiefung" }
+}
+```
+
+
+## Aufklappbare Frage/Antwort-Felder
+Für FAQ- oder Praxisfragen kann jedes `standard`-Kapitel `accordionItems` enthalten. Die Frage selbst ist die klickbare gelbe Zeile; die Antwort wird darunter auf- bzw. zugeklappt. Beispiel:
+
+```js
+accordionVariant: "faq",
+accordionItems: [
+  {
+    id: "faq-1",
+    question: "Frage?",
+    answer: ["Antwort Absatz 1.", "Antwort Absatz 2."]
+  }
+]
+```
+
+Die Interaktion wird über Piano Analytics als `accordion.toggle` erfasst.

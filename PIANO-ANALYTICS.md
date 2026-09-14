@@ -94,3 +94,25 @@ Projekt-/Contentwerte werden ausschließlich in `src/project.js` gepflegt. Die t
 - PDF: `Download PDF` erst nach erfolgreicher PDF-Erstellung.
 - Links: keine vollständigen URLs mit Query-Parametern als Custom Property.
 - Desktop, iOS Safari und Android Chrome testen.
+
+## Erweiterungen ab Mastertemplate v6 (14.09.2026)
+
+### Accordion / FAQ / Praxisfälle
+- Event: `accordion.toggle`
+- Properties: `chapter_id`, `accordion_id`, `accordion_title`, `accordion_group`, `interaction_state`, `trigger_source`
+- `interaction_state`: `open` oder `close`
+
+### Workflow / Swipe
+- Event: `workflow.slide`
+- Properties: `chapter_id`, `slide_index`, `slide_total`, `slide_title`, `trigger_source`
+- `trigger_source`: u. a. `button_previous`, `button_next`, `dot_navigation`, `swipe_left_forward`, `swipe_right_backward`
+
+Die Swipe-Semantik ist bewusst: **links = vorwärts**, **rechts = rückwärts**.
+
+
+### Frage/Antwort-Akkordeon
+- Event: `accordion.toggle`
+- `accordion_title`: angeklickte Frage
+- `interaction_state`: `open` / `close`
+- `trigger_source`: `accordion_question`
+- `accordion_id`, `accordion_group`, `chapter_id` und `chapter_title` werden ebenfalls übergeben.

@@ -11,6 +11,7 @@ import StepsContent from "./components/StepsContent";
 import SourcesContent from "./components/SourcesContent";
 import VideoContent from "./components/VideoContent";
 import ImprintContent from "./components/ImprintContent";
+import CtaContent from "./components/CtaContent";
 import ImageLightbox from "./components/ImageLightbox";
 import { generateProjectPdf } from "./pdf/generatePdf";
 import {
@@ -26,11 +27,12 @@ function PageContent({ page, onOpenGraphic, onPdf, pdfGenerating }) {
   switch (page.kind) {
     case "hero": return <HeroContent page={page} />;
     case "stats": return <StatsContent page={page} onOpenGraphic={graphicHandler} />;
-    case "steps": return <StepsContent page={page} onOpenGraphic={graphicHandler} />;
+    case "steps": return <StepsContent page={page} onOpenGraphic={graphicHandler} pageName={project.meta.analytics.page} />;
     case "sources": return <SourcesContent page={page} project={project} onPdf={onPdf} pdfGenerating={pdfGenerating} />;
     case "video": return <VideoContent page={page} project={project} />;
     case "imprint": return <ImprintContent page={page} imprint={project.imprint} />;
-    default: return <StandardContent page={page} onOpenGraphic={graphicHandler} />;
+    case "cta": return <CtaContent page={page} project={project} onOpenGraphic={graphicHandler} />;
+    default: return <StandardContent page={page} onOpenGraphic={graphicHandler} pageName={project.meta.analytics.page} />;
   }
 }
 
@@ -82,7 +84,6 @@ export default function App() {
     if (pdfGenerating) return;
     setPdfGenerating(true);
     setPdfProgress(1);
-
     trackEvent("click.action", {
       pop_in_type: "PDF",
       pop_in_name: project.meta.pdfFileName,
@@ -92,7 +93,6 @@ export default function App() {
       document_id: `${project.meta.projectId}-pdf`,
       trigger_source: triggerSource
     });
-
     try {
       const result = await generateProjectPdf({ project, onProgress: setPdfProgress });
       trackEvent("click.action", {
@@ -109,28 +109,17 @@ export default function App() {
       console.error("PDF generation failed", error);
       window.alert("Das PDF konnte nicht erstellt werden. Bitte versuchen Sie es erneut.");
     } finally {
-      window.setTimeout(() => {
-        setPdfGenerating(false);
-        setPdfProgress(0);
-      }, 500);
+      window.setTimeout(() => { setPdfGenerating(false); setPdfProgress(0); }, 500);
     }
   }, [pdfGenerating, activeIndex, pageName]);
 
   useEffect(() => {
-    initPianoTracking({
-      project_id: project.meta.projectId,
-      entry_point: getEntryPoint()
-    });
-
+    initPianoTracking({ project_id: project.meta.projectId, entry_point: getEntryPoint() });
     document.title = project.meta.title;
     trackOnce("page-display", "page.display", {
       page: pageName,
       page_url: sanitizePageUrl(),
-      de_page_category: [
-        "med.i.scroll",
-        project.meta.analytics.medicalField,
-        project.meta.analytics.indication
-      ],
+      de_page_category: ["med.i.scroll", project.meta.analytics.medicalField, project.meta.analytics.indication],
       de_page_tags: project.meta.analytics.tags,
       page_type: project.meta.analytics.pageType,
       visitor_type: project.meta.analytics.visitorType,
@@ -151,44 +140,22 @@ export default function App() {
       const atDocumentEnd = Math.ceil(window.scrollY + window.innerHeight) >= root.scrollHeight - 2;
       for (const percent of [25, 50, 75, 100]) {
         const reached = percent === 100 ? atDocumentEnd : depth >= percent / 100;
-        if (reached) {
-          trackOnce(`scroll-${percent}`, "page.scroll", {
-            page: pageName,
-            scroll_rate: percent
-          });
-        }
+        if (reached) trackOnce(`scroll-${percent}`, "page.scroll", { page: pageName, scroll_rate: percent });
       }
     };
 
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
-
     const hash = window.location.hash.replace("#", "");
     if (hash) setTimeout(() => document.getElementById(hash)?.scrollIntoView({ block: "start" }), 100);
-
     return () => window.removeEventListener("scroll", onScroll);
   }, [pageName]);
 
   return (
     <>
-      <TopBar
-        activeIndex={activeIndex}
-        pages={pages}
-        project={project}
-        onMenu={() => setMenuOpen(true)}
-        onPdf={handlePdf}
-        pdfGenerating={pdfGenerating}
-        pdfProgress={pdfProgress}
-      />
+      <TopBar activeIndex={activeIndex} pages={pages} project={project} onMenu={() => setMenuOpen(true)} onPdf={handlePdf} pdfGenerating={pdfGenerating} pdfProgress={pdfProgress} />
       <ProgressRail pages={pages} activeIndex={activeIndex} />
-      <MenuOverlay
-        open={menuOpen}
-        pages={pages}
-        activeIndex={activeIndex}
-        title={project.meta.title}
-        pageName={pageName}
-        onClose={() => setMenuOpen(false)}
-      />
+      <MenuOverlay open={menuOpen} pages={pages} activeIndex={activeIndex} title={project.meta.title} pageName={pageName} onClose={() => setMenuOpen(false)} />
       <main className="story">
         {pages.map((page, index) => (
           <PageShell
@@ -204,24 +171,11 @@ export default function App() {
             projectId={project.meta.projectId}
             pageName={pageName}
           >
-            <PageContent
-              page={page}
-              onOpenGraphic={() => handleOpenGraphic(page)}
-              onPdf={handlePdf}
-              pdfGenerating={pdfGenerating}
-            />
+            <PageContent page={page} onOpenGraphic={() => handleOpenGraphic(page)} onPdf={handlePdf} pdfGenerating={pdfGenerating} />
           </PageShell>
         ))}
       </main>
-      <ImageLightbox
-        open={Boolean(openGraphic)}
-        image={openGraphic?.inlineImage || openGraphic?.background}
-        imageId={openGraphic?.imageId || openGraphic?.id}
-        title={openGraphic?.kicker || openGraphic?.nav || "Grafik"}
-        chapterId={openGraphic?.id}
-        pageName={pageName}
-        onClose={handleCloseGraphic}
-      />
+      <ImageLightbox open={Boolean(openGraphic)} image={openGraphic?.inlineImage || openGraphic?.background} imageId={openGraphic?.imageId || openGraphic?.id} title={openGraphic?.kicker || openGraphic?.nav || "Grafik"} chapterId={openGraphic?.id} pageName={pageName} onClose={handleCloseGraphic} />
     </>
   );
 }
