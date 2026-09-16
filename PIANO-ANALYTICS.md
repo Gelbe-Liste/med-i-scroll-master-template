@@ -116,3 +116,10 @@ Die Swipe-Semantik ist bewusst: **links = vorwärts**, **rechts = rückwärts**.
 - `interaction_state`: `open` / `close`
 - `trigger_source`: `accordion_question`
 - `accordion_id`, `accordion_group`, `chapter_id` und `chapter_title` werden ebenfalls übergeben.
+
+
+## v6.2 – Interaktive Kennzahlen und Workflow-Status
+
+Die Kennzahlenanimation (0 → Zielwert beim Sichtbarwerden) ist ein automatischer Darstellungseffekt und erzeugt **bewusst kein zusätzliches Piano-Event**. Dadurch wird die Animation nicht fälschlich als aktive Nutzerinteraktion gewertet.
+
+Die Workflow-Navigation bleibt über `workflow.slide` messbar. Relevante Properties sind `slide_index`, `slide_total`, `slide_title` und `trigger_source`; für Gesten werden `swipe_left_forward` und `swipe_right_backward`, für Buttons `button_previous` und `button_next` verwendet. Die visuelle Kennzeichnung aktiver/inaktiver Buttons verändert das Tracking nicht.

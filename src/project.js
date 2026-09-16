@@ -83,9 +83,9 @@ export const project = {
       attribution: "Redaktion Gelbe Liste"
     },
     {
-      id: "ueberblick",
+      id: "kernaussagen",
       number: "02",
-      nav: "Überblick",
+      nav: "Kernaussagen",
       kicker: "Kernaussagen",
       title: "Die wichtigsten Fakten auf einen Blick",
       subtitle: "Beispielhafte Kennzahlen – vor Veröffentlichung durch freigegebene Inhalte ersetzen.",
@@ -99,8 +99,8 @@ export const project = {
       align: "left",
       kind: "stats",
       stats: [
-        { value: "01", label: "Beispielkennzahl oder Kernaussage" },
-        { value: "02", label: "Zweite Kennzahl oder Einordnung" }
+        { value: "78 %", label: "Beispielkennzahl – beim Eintritt in den sichtbaren Bereich animiert" },
+        { value: "63 %", label: "Zweite Beispielkennzahl – zählt ebenfalls von 0 % bis zum Zielwert" }
       ],
       quote: "Eine zentrale Botschaft kann hier besonders hervorgehoben werden.",
       bullets: ["Aspekt A", "Aspekt B", "Aspekt C"]

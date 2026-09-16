@@ -1569,3 +1569,35 @@ button.secondary-cta {
 
 @media(max-width:640px){.content-card h1{font-size:clamp(2.55rem,12vw,4.35rem);line-height:1}.content-card h2{font-size:clamp(1.85rem,8.7vw,3rem);line-height:1.02}.mega-stat{font-size:clamp(2.45rem,11.5vw,4.15rem)!important;line-height:1!important}.inline-figure--chapter{margin-top:18px;aspect-ratio:auto;width:100%!important;max-width:100%!important;height:auto!important}.chapter-cta-badges{gap:7px}.chapter-cta-badges span{font-size:.75rem}.accordion{border-radius:16px}.accordion__question{min-height:54px;padding:14px 15px;font-size:.95rem}.accordion__body{padding:14px 15px 4px}.accordion__teaser{padding:12px 15px 0}.workflow-carousel__hint{font-size:.8rem}.workflow-carousel__viewport{border-radius:16px}.workflow-slide{padding:18px 16px 14px}.workflow-slide__meta{font-size:.75rem}.workflow-slide__number{width:42px;height:42px;font-size:1.05rem}.workflow-slide h3{font-size:1.12rem;line-height:1.2}.workflow-carousel__controls{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.workflow-carousel__button{padding:11px 12px;font-size:.92rem}.workflow-carousel__status{grid-column:1/-1;order:-1}.inline-graphic-block,.inline-graphic-trigger,.inline-graphic-trigger .inline-figure{width:100%;max-width:100%;min-width:0}.inline-graphic-block,.inline-graphic-trigger{overflow:hidden}.inline-graphic-trigger .inline-figure{height:auto!important;object-fit:contain}}
 @media print{.accordion__body{display:block!important;border-top:0!important;margin-top:0!important;padding:0 0 8px!important}.accordion__question{background:transparent!important;padding:8px 0!important}.accordion__icon,.workflow-carousel__hint,.workflow-carousel__controls,.workflow-carousel__dots{display:none!important}.workflow-carousel__viewport{overflow:visible!important;border:0!important;background:transparent!important}.workflow-carousel__track{display:block!important;transform:none!important}.workflow-slide{width:100%!important;padding:12px 0!important;border-top:1px solid rgba(0,0,0,.12);break-inside:avoid}}
+
+
+/* =========================================================
+   v6.2 – Kennzahlen, Kapitelgrafik und Workflow-Navigation
+   ========================================================= */
+/* Stats-Grafiken: natürliche Bildhöhe, volle verfügbare Breite.
+   Verhindert seitlichen Weißraum durch starre Höhen-/Aspect-Ratio-Vorgaben. */
+.stats-card .inline-graphic-trigger .inline-figure,
+.stats-card .inline-figure--chapter {
+  display: block;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  max-height: none !important;
+  object-fit: contain;
+}
+
+/* Workflow: verfügbare Navigation gelb, deaktivierte Navigation hellgrau;
+   Schrift bleibt in beiden Zuständen schwarz. */
+.workflow-carousel__button {
+  background: var(--yellow, #ffdc00);
+  color: #111;
+  border-color: rgba(17,17,17,.16);
+  opacity: 1;
+}
+.workflow-carousel__button:disabled {
+  background: #f0f0ee;
+  color: #111;
+  border-color: rgba(17,17,17,.12);
+  opacity: 1;
+  cursor: not-allowed;
+}

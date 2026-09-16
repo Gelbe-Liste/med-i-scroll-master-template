@@ -1,3 +1,7 @@
+# med.i.scroll Mastertemplate v6.2
+
+Neu in v6.2: animierte Kennzahlen (0 → Zielwert), optimierte Stats-Grafikrahmen und eindeutige Aktiv/Inaktiv-Zustände der Workflow-Navigation. Details: `UPDATE-2026-09-16-v6.2_Interaktive-Kennzahlen-und-Workflow.md`.
+
 # Gelbe Liste med.i.scroll – Mastertemplate
 
 Dieses Repository ist die wiederverwendbare technische Basis für neue med.i.scroll-Projekte.
