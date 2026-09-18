@@ -25,7 +25,6 @@ function formatAnimatedValue(parsed, value) {
 function AnimatedStatValue({ value }) {
   const ref = useRef(null);
   const frameRef = useRef(0);
-  const hasAnimatedRef = useRef(false);
   const parsed = useMemo(() => parseStatValue(value), [value]);
   const [isVisible, setIsVisible] = useState(false);
   const [displayValue, setDisplayValue] = useState(() => {
@@ -38,13 +37,10 @@ function AnimatedStatValue({ value }) {
     if (!element) return undefined;
 
     const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((entry) => entry.isIntersecting)) {
-          setIsVisible(true);
-          observer.disconnect();
-        }
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting && entry.intersectionRatio >= 0.35);
       },
-      { threshold: 0.35 }
+      { threshold: [0, 0.35] }
     );
 
     observer.observe(element);
@@ -52,12 +48,21 @@ function AnimatedStatValue({ value }) {
   }, []);
 
   useEffect(() => {
-    if (!parsed || !isVisible || hasAnimatedRef.current) {
-      if (!parsed) setDisplayValue(value);
+    cancelAnimationFrame(frameRef.current);
+
+    if (!parsed) {
+      setDisplayValue(value);
       return undefined;
     }
 
-    hasAnimatedRef.current = true;
+    const zeroValue = `${(0).toFixed(parsed.decimals).replace(".", ",")}${parsed.suffix}`;
+
+    if (!isVisible) {
+      setDisplayValue(zeroValue);
+      return undefined;
+    }
+
+    setDisplayValue(zeroValue);
     const duration = 1400;
     const start = performance.now();
 

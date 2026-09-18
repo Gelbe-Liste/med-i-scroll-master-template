@@ -1,6 +1,8 @@
-# med.i.scroll Mastertemplate v6.2
+# med.i.scroll Mastertemplate v6.3
 
-Neu in v6.2: animierte Kennzahlen (0 → Zielwert), optimierte Stats-Grafikrahmen und eindeutige Aktiv/Inaktiv-Zustände der Workflow-Navigation. Details: `UPDATE-2026-09-16-v6.2_Interaktive-Kennzahlen-und-Workflow.md`.
+Neu in v6.3: Die animierten Kennzahlen im Kapiteltyp `stats` zählen **bei jedem erneuten Sichtbarwerden** von 0 bis zum Zielwert hoch. Sobald eine Kennzahl mindestens ca. 35 % sichtbar ist, startet die Animation; verlässt sie den sichtbaren Bereich, wird sie für den nächsten Sichtkontakt wieder auf 0 vorbereitet. Details: `UPDATE-2026-09-18-v6.3_Kennzahlen-Animation-bei-Sichtbarkeit.md`.
+
+Die Erweiterungen aus v6.2 – animierte Kennzahlen, optimierte Stats-Grafikrahmen und eindeutige Aktiv/Inaktiv-Zustände der Workflow-Navigation – bleiben vollständig erhalten.
 
 # Gelbe Liste med.i.scroll – Mastertemplate
 

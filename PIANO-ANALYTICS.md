@@ -120,6 +120,6 @@ Die Swipe-Semantik ist bewusst: **links = vorwärts**, **rechts = rückwärts**.
 
 ## v6.2 – Interaktive Kennzahlen und Workflow-Status
 
-Die Kennzahlenanimation (0 → Zielwert beim Sichtbarwerden) ist ein automatischer Darstellungseffekt und erzeugt **bewusst kein zusätzliches Piano-Event**. Dadurch wird die Animation nicht fälschlich als aktive Nutzerinteraktion gewertet.
+Die Kennzahlenanimation (0 → Zielwert) ist ein automatischer Darstellungseffekt und erzeugt **bewusst kein zusätzliches Piano-Event**. Seit v6.3 wird die Animation **bei jedem erneuten Sichtbarwerden** der Kennzahl wiederholt. Auch diese Wiederholungen werden nicht als aktive Nutzerinteraktion getrackt; die bestehenden Sichtbarkeits-/Kapitel-Events bleiben davon unberührt.
 
 Die Workflow-Navigation bleibt über `workflow.slide` messbar. Relevante Properties sind `slide_index`, `slide_total`, `slide_title` und `trigger_source`; für Gesten werden `swipe_left_forward` und `swipe_right_backward`, für Buttons `button_previous` und `button_next` verwendet. Die visuelle Kennzeichnung aktiver/inaktiver Buttons verändert das Tracking nicht.

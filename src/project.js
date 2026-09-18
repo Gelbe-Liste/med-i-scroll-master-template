@@ -99,8 +99,8 @@ export const project = {
       align: "left",
       kind: "stats",
       stats: [
-        { value: "78 %", label: "Beispielkennzahl – beim Eintritt in den sichtbaren Bereich animiert" },
-        { value: "63 %", label: "Zweite Beispielkennzahl – zählt ebenfalls von 0 % bis zum Zielwert" }
+        { value: "78 %", label: "Beispielkennzahl – zählt bei jedem Sichtbarwerden von 0 % hoch" },
+        { value: "63 %", label: "Zweite Beispielkennzahl – Animation wird beim erneuten Sichtbarwerden wiederholt" }
       ],
       quote: "Eine zentrale Botschaft kann hier besonders hervorgehoben werden.",
       bullets: ["Aspekt A", "Aspekt B", "Aspekt C"]
