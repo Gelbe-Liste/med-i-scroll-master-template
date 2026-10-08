@@ -15,20 +15,14 @@ export const project = {
     projectId: "indikation-template",
     analytics: {
       page: "med.i.scroll | Indikation",
-      pageType: "Microsite",
+      pageType: "med.i.scroll",
       visitorType: "Not logged",
       medicalField: "Medizinisches Fachgebiet",
       indication: "Indikation",
-      articleCategory: ["MED.I.SCROLL"],
+      articleCategory: ["Informationsseite"],
+      specialtyCategories: [],
+      contentTypeCategories: [],
       tags: ["med.i.scroll", "Gelbe Liste", "Scrollytelling"],
-      product: {
-        name: "",
-        molecules: [],
-        titulaire: "",
-        atcClassCodes: [],
-        atcClassNames: [],
-        ucd10Codes: []
-      }
     },
     pdfFileName: "Indikation_Gelbe-Liste.pdf",
     pdfSubject: "Medizinisches Fachgebiet | Gelbe Liste",

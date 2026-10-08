@@ -50,7 +50,7 @@ Der Header-PDF-Button erzeugt eine echte clientseitige DIN-A4-Hochformat-PDF mit
 
 ## Piano Analytics Tracking
 
-Die stabile Projekt-ID wird in `project.meta.projectId` definiert. Die Tracking-Schicht liegt zentral in `src/tracking/piano.js` und verwendet bevorzugt die vorhandene Vidal-/Gelbe-Liste-Semantik. Scroll Tracking wurde auf die aktuelle Piano-Logik `page.scroll` + `scroll_rate` umgestellt; Kapitel- und Video-Events werden als klar definierte Custom Events geführt.
+Die stabile Projekt-ID wird in `project.meta.projectId` definiert. Die Tracking-Schicht liegt zentral in `src/tracking/piano.js`. Stand 08.10.2026 / Mapping v1.2: `page_type="med.i.scroll"`; `article_category` stammt aus der Vidal-Pagetype-Liste und `de_page_category` ausschließlich aus den Vidal-Listen Specialty + Content Type. Die frühere Custom-Property `entry_point` ist entfernt; Acquisition läuft über die vorhandenen Piano-Dimensionen UTM Medium, UTM Source und UTM Campaign. `is_PAP=1` wird persistent gesetzt. Scroll Tracking nutzt `page.scroll` + `scroll_rate`; Kapitel- und Video-Events bleiben klar definierte Custom Events.
 
 Im Mastertemplate ist `VITE_PIANO_ENABLED=false`. Nach Validierung der neuen Properties/Events im Piano Data Model und interner Datenschutzfreigabe wird die Variable im produktiven Vercel-Projekt auf `true` gesetzt.
 

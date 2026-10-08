@@ -1,125 +1,33 @@
-# Piano Analytics – med.i.scroll Mastertemplate v5
+# Piano Analytics – Zielstand 08.10.2026 (Mapping v1.2)
 
-Stand: 08.09.2026
+## Format
 
-## Zielbild
+- `page_type`: `med.i.scroll`
+- `article_category`: `Informationsseite` (Pagetype aus der Vidal-Liste)
+- `de_page_category`: [] (nur Werte aus Specialty + Content Type)
+- `is_PAP`: `1`
+- `visitor_type`: `Not logged`
 
-Das Tracking wurde gegenüber v4 auf die vorhandene Vidal-/Gelbe-Liste-Semantik zurückgeführt. Vorhandene Standard-/Bestands-Events werden bevorzugt, neue Custom Events nur dort ergänzt, wo kein passendes bestehendes Event existiert.
+Mastertemplate: Pagetype „Informationsseite“ als neutraler Default; Specialty und Content Type sind projektspezifisch aus den Vidal-Listen zu setzen.
 
-### Wiederverwendete Events
+## Acquisition / UTM
 
-- `page.display` – initialer Aufruf des med.i.scroll
-- `click.action` – Grafik, PDF, CTA/Links, Navigation und Menü-Interaktionen
-- `pop_in.display` – Anzeige des Kapitelmenüs
+Die frühere Custom-Property `entry_point` wird **nicht mehr verwendet**. Für Kampagnen- und Quellenattribution werden die in Piano bereits vorhandenen Dimensionen **UTM Medium**, **UTM Source** und **UTM Campaign** genutzt. Die konkrete UTM-Wertelogik für NFC, QR und Direct Link wird zentral mit Vidal Analytics/Marketing festgelegt.
 
-### Neue Custom Events
+## Product Properties
 
-- `chapter.display` – Kapitel erstmals zu mindestens 35 % sichtbar
-- `page.scroll` – Scroll-Milestones 25/50/75/100; entspricht der aktuellen Piano-Empfehlung für Scroll Tracking
-- `video.start`, `video.progress`, `video.complete` – schlankes Video-Reporting, solange AV Insights nicht verbindlich eingesetzt wird
+`product_name`, `product_mol`, `product_titulaire`, `product_ATC_class_code`, `product_ATC_class_name` und `product_UCD10_codes` dürfen nur bei einer echten Pharmindex-API-Verknüpfung mit den dort gelieferten MMI-Bezeichnungen befüllt werden. In diesem Projekt werden sie daher aktuell nicht gesendet.
 
-Die frühere Eventstruktur `scroll_depth`, `module_complete`, `image_view_*`, `outbound_click`, `navigation_click`, `pdf_generate_*` wird im Template nicht mehr als eigene Business-Semantik verwendet.
+`box_names` ist Medibox-spezifisch und wird nicht verwendet.
 
-## Bereits vorhandene Properties, die wiederverwendet werden
+## Events
 
-`page`, `page_url`, `de_page_category`, `de_page_tags`, `product_name`, `product_mol`, `product_titulaire`, `product_ATC_class_code`, `product_ATC_class_name`, `product_UCD10_codes`, `page_type`, `visitor_type`, `article_category`, `pop_in_name`, `pop_in_type`, `click`.
+Bestandssemantik: `page.display`, `click.action`, `pop_in.display`.
 
-Produkt-Properties werden nur gesetzt, wenn sie in `project.meta.analytics.product` gepflegt sind. Personenbezogene oder Login-bezogene Werte (`user_id`, `occupation`, `speciality_function`, `exercise_mode`) werden im Standalone-Template nicht erzeugt.
+med.i.scroll Custom Events: `chapter.display`, `page.scroll` sowie – nur falls A/V Insights nicht Zielstandard wird – `video.start`, `video.progress`, `video.complete`. Projektabhängige Interaktionen wie Accordion/Workflow bleiben als bereits implementierte Custom Events bestehen und müssen vor Aktivierung im Piano Data Model freigegeben sein.
 
-## Neue Custom Properties
+`page.display` wird weiterhin gesendet, aber im Template nicht eigenmächtig als `essential` in `consent_items.events` ergänzt, solange die Vidal-Consent-Zuordnung nicht final bestätigt ist.
 
-| Key | Typ | Zweck |
-| --- | --- | --- |
-| `project_id` | STRING | stabile Projekt-ID |
-| `chapter_id` | STRING | technische Kapitel-ID |
-| `chapter_number` | INTEGER | Kapitelreihenfolge |
-| `chapter_title` | STRING | redaktioneller Kapiteltitel |
-| `content_type` | STRING | `hero`, `stats`, `standard`, `steps`, `video`, `sources`, `imprint` |
-| `scroll_rate` | INTEGER | 25 / 50 / 75 / 100 |
-| `image_id` | STRING | stabile Grafik-ID |
-| `zoom_level` | DECIMAL | erste relevante Zoomstufe |
-| `document_id` | STRING | stabile PDF-/Dokument-ID |
-| `element_id` | STRING | stabile CTA-/Link-ID |
-| `destination_path` | STRING | bereinigtes Ziel ohne Query-Parameter |
-| `trigger_source` | STRING | `header`, `sources`, `chapter`, `menu` usw. |
-| `entry_point` | STRING | `nfc_tag`, `qr_code`, `direct_link` bzw. Kampagnenquelle |
-| `video_id` | STRING | stabile Video-ID |
-| `video_name` | STRING | redaktioneller Videoname |
-| `progress_percent` | INTEGER | 25 / 50 / 75 / 100 |
+## Deployment
 
-## Piano Data Management
-
-Vor Aktivierung:
-
-1. Custom Properties im Data Model anlegen/validieren; überwiegend Event Scope.
-2. Custom Events `chapter.display`, `page.scroll`, `video.start`, `video.progress`, `video.complete` als **On Site** anlegen.
-3. Bei Nutzung der aktuellen `essential`-Konfiguration die neuen Events/Properties in `pdl.consent_items.PA` nur nach interner Datenschutz-/Analytics-Freigabe als `essential` klassifizieren.
-4. Erst danach produktives Tracking aktivieren.
-
-Hinweis Video: Falls Vidal A/V Insights verbindlich nutzt, sollten die Custom-Videoevents durch die nativen `av.*`-Events mit `av_content_id` ersetzt werden. Das ist eine gesonderte Analytics-Entscheidung.
-
-## Zentrale Konfiguration
-
-`.env` / Vercel:
-
-```env
-VITE_PIANO_ENABLED=true
-VITE_PIANO_SITE_ID=640794
-VITE_PIANO_COLLECT_DOMAIN=https://rwwnhth.pa-cd.com
-```
-
-Im Mastertemplate ist Tracking bewusst deaktiviert (`false`), damit Entwicklung und Vercel-Previews nicht ungeprüft Produktivdaten erzeugen.
-
-Projekt-/Contentwerte werden ausschließlich in `src/project.js` gepflegt. Die technische Tracking-Schicht liegt in `src/tracking/piano.js`.
-
-## KPI-Mapping
-
-- Reach/Visits: `page.display`
-- Chapter Reach: `chapter.display` je `chapter_id`
-- Scroll Depth: `page.scroll` + `scroll_rate`
-- Completion Rate: Anteil der Visits mit `page.scroll` + `scroll_rate=100`
-- Graphic Open Rate: `click.action` + `click="Open graphic"`
-- PDF Download Rate: `click.action` + `click="Download PDF"`
-- CTA CTR: `click.action` + `click="Open external link"`
-- Video Start/Progress/Complete: neue Videoevents
-
-## QA vor Livegang
-
-- Data Model: alle neuen Properties korrekt typisiert und validiert.
-- Custom Events: On Site und produktiv verfügbar.
-- `page.display` genau einmal beim Einstieg.
-- `chapter.display` je Kapitel maximal einmal pro App-Aufruf.
-- `page.scroll` 25/50/75/100 jeweils einmal.
-- Grafik: Open/Close und erster Zoom ohne Eventflut.
-- PDF: `Download PDF` erst nach erfolgreicher PDF-Erstellung.
-- Links: keine vollständigen URLs mit Query-Parametern als Custom Property.
-- Desktop, iOS Safari und Android Chrome testen.
-
-## Erweiterungen ab Mastertemplate v6 (14.09.2026)
-
-### Accordion / FAQ / Praxisfälle
-- Event: `accordion.toggle`
-- Properties: `chapter_id`, `accordion_id`, `accordion_title`, `accordion_group`, `interaction_state`, `trigger_source`
-- `interaction_state`: `open` oder `close`
-
-### Workflow / Swipe
-- Event: `workflow.slide`
-- Properties: `chapter_id`, `slide_index`, `slide_total`, `slide_title`, `trigger_source`
-- `trigger_source`: u. a. `button_previous`, `button_next`, `dot_navigation`, `swipe_left_forward`, `swipe_right_backward`
-
-Die Swipe-Semantik ist bewusst: **links = vorwärts**, **rechts = rückwärts**.
-
-
-### Frage/Antwort-Akkordeon
-- Event: `accordion.toggle`
-- `accordion_title`: angeklickte Frage
-- `interaction_state`: `open` / `close`
-- `trigger_source`: `accordion_question`
-- `accordion_id`, `accordion_group`, `chapter_id` und `chapter_title` werden ebenfalls übergeben.
-
-
-## v6.2 – Interaktive Kennzahlen und Workflow-Status
-
-Die Kennzahlenanimation (0 → Zielwert) ist ein automatischer Darstellungseffekt und erzeugt **bewusst kein zusätzliches Piano-Event**. Seit v6.3 wird die Animation **bei jedem erneuten Sichtbarwerden** der Kennzahl wiederholt. Auch diese Wiederholungen werden nicht als aktive Nutzerinteraktion getrackt; die bestehenden Sichtbarkeits-/Kapitel-Events bleiben davon unberührt.
-
-Die Workflow-Navigation bleibt über `workflow.slide` messbar. Relevante Properties sind `slide_index`, `slide_total`, `slide_title` und `trigger_source`; für Gesten werden `swipe_left_forward` und `swipe_right_backward`, für Buttons `button_previous` und `button_next` verwendet. Die visuelle Kennzeichnung aktiver/inaktiver Buttons verändert das Tracking nicht.
+Tracking bleibt im Paket mit `VITE_PIANO_ENABLED=false` deaktiviert. Aktivierung erst nach Data-Model-, Privacy-/Essential- und Staging-QA. Site: `640794`, Collection Domain: `https://rwwnhth.pa-cd.com`.

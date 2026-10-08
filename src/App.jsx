@@ -15,7 +15,6 @@ import CtaContent from "./components/CtaContent";
 import ImageLightbox from "./components/ImageLightbox";
 import { generateProjectPdf } from "./pdf/generatePdf";
 import {
-  getEntryPoint,
   initPianoTracking,
   sanitizePageUrl,
   trackEvent,
@@ -114,22 +113,19 @@ export default function App() {
   }, [pdfGenerating, activeIndex, pageName]);
 
   useEffect(() => {
-    initPianoTracking({ project_id: project.meta.projectId, entry_point: getEntryPoint() });
+    initPianoTracking({ project_id: project.meta.projectId });
     document.title = project.meta.title;
     trackOnce("page-display", "page.display", {
       page: pageName,
       page_url: sanitizePageUrl(),
-      de_page_category: ["med.i.scroll", project.meta.analytics.medicalField, project.meta.analytics.indication],
+      de_page_category: [
+        ...(project.meta.analytics.specialtyCategories || []),
+        ...(project.meta.analytics.contentTypeCategories || [])
+      ],
       de_page_tags: project.meta.analytics.tags,
       page_type: project.meta.analytics.pageType,
       visitor_type: project.meta.analytics.visitorType,
-      article_category: project.meta.analytics.articleCategory,
-      product_name: project.meta.analytics.product?.name || undefined,
-      product_mol: project.meta.analytics.product?.molecules?.length ? project.meta.analytics.product.molecules : undefined,
-      product_titulaire: project.meta.analytics.product?.titulaire || undefined,
-      product_ATC_class_code: project.meta.analytics.product?.atcClassCodes?.length ? project.meta.analytics.product.atcClassCodes : undefined,
-      product_ATC_class_name: project.meta.analytics.product?.atcClassNames?.length ? project.meta.analytics.product.atcClassNames : undefined,
-      product_UCD10_codes: project.meta.analytics.product?.ucd10Codes?.length ? project.meta.analytics.product.ucd10Codes : undefined
+      article_category: project.meta.analytics.articleCategory
     });
 
     const onScroll = () => {

@@ -1,6 +1,6 @@
 const sentOnce = new Set();
 const pendingEvents = [];
-let persistentContext = {};
+let persistentContext = { is_PAP: 1 };
 let initPromise = null;
 
 typeof window !== "undefined" && (window.__MEDI_SCROLL_TRACKING__ = window.__MEDI_SCROLL_TRACKING__ || []);
@@ -27,7 +27,6 @@ const essentialProperties = [
   "visitor_type",
   "occupation",
   "article_category",
-  "box_names",
   "pop_in_name",
   "pop_in_type",
   "click",
@@ -44,7 +43,6 @@ const essentialProperties = [
   "element_id",
   "destination_path",
   "trigger_source",
-  "entry_point",
   "video_id",
   "video_name",
   "progress_percent",
@@ -58,7 +56,6 @@ const essentialProperties = [
 ];
 
 const essentialEvents = [
-  "page.display",
   "pop_in.display",
   "click.action",
   "chapter.display",
@@ -161,14 +158,6 @@ export function sanitizeDestinationPath(url) {
   }
 }
 
-export function getEntryPoint() {
-  const params = new URLSearchParams(window.location.search);
-  const raw = (params.get("src") || params.get("utm_source") || "").toLowerCase();
-  if (["nfc", "nfc_tag", "nfc-tag"].includes(raw)) return "nfc_tag";
-  if (["qr", "qr_code", "qr-code"].includes(raw)) return "qr_code";
-  if (raw) return raw.replace(/[^a-z0-9_-]/g, "_").slice(0, 80);
-  return "direct_link";
-}
 
 export function setTrackingContext(properties = {}) {
   persistentContext = cleanProperties({ ...persistentContext, ...properties });
