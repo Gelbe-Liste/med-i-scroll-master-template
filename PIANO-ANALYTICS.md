@@ -1,4 +1,4 @@
-# Piano Analytics – Zielstand 08.10.2026 (Mapping v1.2)
+# Piano Analytics – Zielstand 20.10.2026 (Mapping v1.3)
 
 ## Format
 
@@ -24,10 +24,21 @@ Die frühere Custom-Property `entry_point` wird **nicht mehr verwendet**. Für K
 
 Bestandssemantik: `page.display`, `click.action`, `pop_in.display`.
 
-med.i.scroll Custom Events: `chapter.display`, `page.scroll` sowie – nur falls A/V Insights nicht Zielstandard wird – `video.start`, `video.progress`, `video.complete`. Projektabhängige Interaktionen wie Accordion/Workflow bleiben als bereits implementierte Custom Events bestehen und müssen vor Aktivierung im Piano Data Model freigegeben sein.
+med.i.scroll Custom Events: `chapter.display`, `page.scroll`; Video-Fallback `video.start`, `video.progress`, `video.complete` nur bei Freigabe statt A/V Insights. Projekte mit Accordion/Workflow nutzen zusätzlich `accordion.toggle` und `workflow.slide` mit den 7 dafür definierten Properties. Interne Sprungziele werden als `target_chapter_id` erfasst (nicht über `destination_path`).
 
 `page.display` wird weiterhin gesendet, aber im Template nicht eigenmächtig als `essential` in `consent_items.events` ergänzt, solange die Vidal-Consent-Zuordnung nicht final bestätigt ist.
 
 ## Deployment
 
 Tracking bleibt im Paket mit `VITE_PIANO_ENABLED=false` deaktiviert. Aktivierung erst nach Data-Model-, Privacy-/Essential- und Staging-QA. Site: `640794`, Collection Domain: `https://rwwnhth.pa-cd.com`.
+
+## Sichtbarkeit und Wertelisten (Mapping v1.3)
+
+- `chapter.display`: je Kapitel einmal pro Page Load, wenn ≥ 35 % der kleineren Höhe aus Kapitel und Viewport sichtbar sind. Langkapitel werden zusätzlich auf Scroll/Resize geprüft.
+- `workflow.slide`: nur nach tatsächlicher Sichtbarkeit des Karussells; beim ersten sichtbaren Slide `trigger_source=viewport`, danach bei Interaktionen tatsächliche Quelle. Wiederholte Sichtbarkeit ohne Indexwechsel wird nicht erneut gezählt.
+- `content_type`: `hero | stats | standard | steps | video | sources | imprint | cta | faq | cases | workflow_slide` (je nach Komponenten und Projekt).
+- `destination_path`: nur Host + Pfad ohne Query/Hash; interne Sprungziele per `target_chapter_id`.
+- Das Tracking wird mit `VITE_PIANO_ENABLED=false` ausgeliefert. `VITE_PIANO_ESSENTIAL_APPROVED=false` verhindert Essential-Overrides, bis die zentrale Datenschutz-Freigabe vorliegt (einschließlich `page.display`).
+- Das SDK kann nach einem Ladefehler bei erneutem `initPianoTracking`-Aufruf erneut initialisiert werden.
+
+- Custom-Videoevents sind zusätzlich über `VITE_PIANO_CUSTOM_VIDEO_EVENTS=false` standardmäßig abgeschaltet; Freigabe nur bei dokumentierter Entscheidung gegen A/V Insights.

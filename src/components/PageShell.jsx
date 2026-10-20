@@ -23,8 +23,12 @@ export default function PageShell({
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        setVisible(entry.isIntersecting && entry.intersectionRatio >= 0.12);
-        if (entry.isIntersecting && entry.intersectionRatio >= 0.35) {
+        // Für lange Kapitel ist ein Anteil an der gesamten Kapitelhöhe oft unerreichbar.
+        // Deshalb auf das kleinere Maß aus Kapitelhöhe und Viewport beziehen.
+        const referenceHeight = Math.min(entry.boundingClientRect.height, window.innerHeight);
+        const visibleHeight = entry.isIntersecting ? entry.intersectionRect.height : 0;
+        setVisible(visibleHeight >= referenceHeight * 0.12);
+        if (referenceHeight > 0 && visibleHeight >= referenceHeight * 0.35) {
           onActive(index);
           trackOnce(`chapter-${page.id}`, "chapter.display", {
             page: pageName,
@@ -35,11 +39,41 @@ export default function PageShell({
           });
         }
       },
-      { threshold: [0.12, 0.2, 0.35, 0.55, 0.75] }
+      { threshold: [0, 0.01, 0.05, 0.12, 0.2, 0.35, 0.55, 0.75] }
     );
 
     observer.observe(element);
-    return () => observer.disconnect();
+    // Prüfen auch beim Scrollen: bei sehr langen Kapiteln bleibt die IO-Ratio < 0.12.
+    let animationFrame = 0;
+    const updateLongChapter = () => {
+      if (animationFrame) return;
+      animationFrame = window.requestAnimationFrame(() => {
+        animationFrame = 0;
+        const rect = element.getBoundingClientRect();
+        const visibleHeight = Math.max(0, Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, 0));
+        const referenceHeight = Math.min(rect.height, window.innerHeight);
+        setVisible(referenceHeight > 0 && visibleHeight >= referenceHeight * 0.12);
+        if (referenceHeight > 0 && visibleHeight >= referenceHeight * 0.35) {
+          onActive(index);
+          trackOnce(`chapter-${page.id}`, "chapter.display", {
+            page: pageName,
+            chapter_id: page.id,
+            chapter_number: index + 1,
+            chapter_title: page.nav,
+            content_type: page.kind
+          });
+        }
+      });
+    };
+    window.addEventListener("scroll", updateLongChapter, { passive: true });
+    window.addEventListener("resize", updateLongChapter);
+    updateLongChapter();
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("scroll", updateLongChapter);
+      window.removeEventListener("resize", updateLongChapter);
+      if (animationFrame) window.cancelAnimationFrame(animationFrame);
+    };
   }, [index, onActive, page, pageName]);
 
   const scrollTo = (targetId, action) => {
@@ -50,7 +84,8 @@ export default function PageShell({
       click: action,
       page: pageName,
       chapter_id: page.id,
-      destination_path: `#${targetId}`,
+      target_chapter_id: targetId,
+      element_id: `chapter-nav-${action.toLowerCase().replace(/\s+/g, "-")}`,
       trigger_source: "chapter_navigation"
     });
     document.getElementById(targetId)?.scrollIntoView({ behavior: "smooth", block: "start" });

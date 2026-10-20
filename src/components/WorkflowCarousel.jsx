@@ -4,13 +4,49 @@ import { trackEvent } from "../tracking/piano";
 export default function WorkflowCarousel({ page, pageName }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const touchStartX = useRef(null);
-  const lastActionSource = useRef("init");
+  const lastActionSource = useRef("viewport");
+  const viewportRef = useRef(null);
+  const lastRecordedIndex = useRef(null);
+  const [isVisible, setIsVisible] = useState(false);
   const total = page.steps?.length || 0;
 
   useEffect(() => {
+    const element = viewportRef.current;
+    if (!element) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      const referenceHeight = Math.min(entry.boundingClientRect.height, window.innerHeight);
+      setIsVisible(entry.isIntersecting && referenceHeight > 0 && entry.intersectionRect.height >= referenceHeight * 0.35);
+    }, { threshold: [0, 0.05, 0.15, 0.35, 0.65] });
+    observer.observe(element);
+    // Bei Karussells > Viewport garantiert der Scroll-Check den 35-%-Sichtbarkeitspunkt.
+    let frame = 0;
+    const updateVisibility = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(() => {
+        frame = 0;
+        const rect = element.getBoundingClientRect();
+        const referenceHeight = Math.min(rect.height, window.innerHeight);
+        const visibleHeight = Math.max(0, Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, 0));
+        setIsVisible(referenceHeight > 0 && visibleHeight >= referenceHeight * 0.35);
+      });
+    };
+    window.addEventListener("scroll", updateVisibility, { passive: true });
+    window.addEventListener("resize", updateVisibility);
+    updateVisibility();
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("scroll", updateVisibility);
+      window.removeEventListener("resize", updateVisibility);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
+  }, [page.id]);
+
+  useEffect(() => {
+    if (!isVisible || lastRecordedIndex.current === activeIndex) return;
     const currentStep = page.steps?.[activeIndex];
     if (!currentStep) return;
 
+    lastRecordedIndex.current = activeIndex;
     trackEvent("workflow.slide", {
       page: pageName,
       chapter_id: page.id,
@@ -22,7 +58,7 @@ export default function WorkflowCarousel({ page, pageName }) {
       slide_title: currentStep.title,
       trigger_source: lastActionSource.current
     });
-  }, [activeIndex, page, pageName, total]);
+  }, [activeIndex, isVisible, page, pageName, total]);
 
   const changeSlide = (direction, triggerSource) => {
     setActiveIndex((current) => {
@@ -59,7 +95,7 @@ export default function WorkflowCarousel({ page, pageName }) {
   if (!total) return null;
 
   return (
-    <div className="workflow-carousel">
+    <div className="workflow-carousel" ref={viewportRef}>
       <div className="workflow-carousel__viewport" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
         <div
           className="workflow-carousel__track"

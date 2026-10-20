@@ -28,7 +28,8 @@ export default function MenuOverlay({ open, pages, activeIndex, title, pageName,
       click: "Select chapter",
       page: pageName,
       chapter_id: pages[activeIndex]?.id,
-      destination_path: `#${id}`,
+      target_chapter_id: id,
+      element_id: `menu-chapter-${id}`,
       trigger_source: "menu"
     });
     onClose();
