@@ -39,6 +39,7 @@ const essentialProperties = [
   "click",
   // Ergänzungen für med.i.scroll – vor Livegang im Piano Data Model validieren
   "project_id",
+  "standalone_mode",
   "chapter_id",
   "chapter_number",
   "chapter_title",

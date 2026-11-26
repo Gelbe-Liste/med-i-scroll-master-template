@@ -14,6 +14,7 @@ import ImprintContent from "./components/ImprintContent";
 import CtaContent from "./components/CtaContent";
 import ImageLightbox from "./components/ImageLightbox";
 import { generateProjectPdf } from "./pdf/generatePdf";
+import { getStandaloneMode } from "./tracking/displayMode";
 import AnalyticsConsent from "./consent/AnalyticsConsent";
 import PosthogDiagnostics from "./tracking/PosthogDiagnostics";
 import {
@@ -115,11 +116,12 @@ export default function App() {
   }, [pdfGenerating, activeIndex, pageName]);
 
   useEffect(() => {
-    initPianoTracking({ project_id: project.meta.projectId });
+    initPianoTracking({ project_id: project.meta.projectId, standalone_mode: getStandaloneMode() });
     document.title = project.meta.title;
     trackOnce("page-display", "page.display", {
       page: pageName,
       page_url: sanitizePageUrl(),
+      standalone_mode: getStandaloneMode(),
       de_page_category: [
         ...(project.meta.analytics.specialtyCategories || []),
         ...(project.meta.analytics.contentTypeCategories || [])
