@@ -1,0 +1,8 @@
+# Optional, derzeit nicht verwendet: die Apps laufen auf ihren Vercel-Produktionsdomains.
+# Fuer Preview keine PostHog-Erfassung aktivieren; diese Datei NICHT nach Production kopieren.
+VITE_POSTHOG_ENABLED=false
+VITE_POSTHOG_PROJECT_TOKEN=
+VITE_POSTHOG_DEPLOY_ENV=preview
+VITE_PIANO_ENABLED=false
+VITE_PIANO_ESSENTIAL_APPROVED=false
+VITE_PIANO_CUSTOM_VIDEO_EVENTS=false

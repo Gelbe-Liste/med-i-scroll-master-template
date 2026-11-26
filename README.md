@@ -1,3 +1,11 @@
+# AKTUELL: med.i.scroll v6.11 – Netzwerkfehlerlösung
+
+Bitte zuerst `START-HIER-POSTHOG-v6.11.md` lesen. Die neue Version benötigt die Rewrite-Regel aus `vercel.json`, um die Event-Requests über die eigene Vercel-Domain zu senden.
+
+---
+
+> **Neu (26.11.2026):** PostHog EU + Piano Paralleltracking vorbereitet. Siehe [POSTHOG-EU-INTEGRATION.md](POSTHOG-EU-INTEGRATION.md).
+
 # med.i.scroll Mastertemplate v6.3
 
 Neu in v6.3: Die animierten Kennzahlen im Kapiteltyp `stats` zählen **bei jedem erneuten Sichtbarwerden** von 0 bis zum Zielwert hoch. Sobald eine Kennzahl mindestens ca. 35 % sichtbar ist, startet die Animation; verlässt sie den sichtbaren Bereich, wird sie für den nächsten Sichtkontakt wieder auf 0 vorbereitet. Details: `UPDATE-2026-09-18-v6.3_Kennzahlen-Animation-bei-Sichtbarkeit.md`.

@@ -1,7 +1,13 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "vite",
-  "installCommand": "rm -f package-lock.json && npm install --include=optional --no-audit --no-fund",
+  "installCommand": "npm ci --include=optional --no-audit --no-fund",
   "buildCommand": "npm run build",
-  "outputDirectory": "dist"
+  "outputDirectory": "dist",
+  "rewrites": [
+    {
+      "source": "/_medi/r",
+      "destination": "https://eu.i.posthog.com/i/v0/e/"
+    }
+  ]
 }
