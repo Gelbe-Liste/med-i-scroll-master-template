@@ -176,7 +176,7 @@ export default function App() {
         ))}
       </main>
       <ImageLightbox open={Boolean(openGraphic)} image={openGraphic?.inlineImage || openGraphic?.background} imageId={openGraphic?.imageId || openGraphic?.id} title={openGraphic?.kicker || openGraphic?.nav || "Grafik"} chapterId={openGraphic?.id} pageName={pageName} onClose={handleCloseGraphic} />
-      <AnalyticsConsent />
+      <AnalyticsConsent projectId={project.meta.projectId} />
       <PosthogDiagnostics />
     </>
   );

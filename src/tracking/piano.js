@@ -64,6 +64,8 @@ const essentialProperties = [
   "slide_title"
 ];
 
+// consent.update (consent_action, consent_version, trigger_source) ist ein reguläres
+// opt-in-only Event. NICHT als Essential-Event definieren; Piano Data Model benötigt Freigabe.
 const essentialEvents = [
   "page.display",
   "pop_in.display",

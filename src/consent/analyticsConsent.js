@@ -40,3 +40,15 @@ export function storeAnalyticsConsent(choice) {
   } catch { /* Private-Browsing: Entscheidung nur für die laufende Seite */ }
   broadcastAnalyticsConsent(choice);
 }
+
+// Fachliches Consent-Event (PostHog sofort, Piano nach zentraler Data-Model-Freigabe).
+// Keine Ablehnungen/Widerrufe als Analytics-Events versenden: ohne Einwilligung
+// darf das Tracking auch NICHT zum Messen der Consent-Quote aktiviert werden.
+export function buildConsentAcceptanceEvent(previousChoice, nextChoice) {
+  if (nextChoice !== "accepted" || previousChoice === "accepted") return null;
+  return {
+    consent_action: "accepted",
+    consent_version: CONSENT_VERSION,
+    trigger_source: previousChoice === null ? "initial_dialog" : "consent_settings",
+  };
+}
